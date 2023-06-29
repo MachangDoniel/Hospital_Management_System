@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
 use App\Models\Doctor;
-use App\Models\Doctors;
+use App\Models\Appointment;
 
 // use DB;
 // use App\Http\Requests;
@@ -23,7 +23,8 @@ class HomeController extends Controller
             } else {
                 return view('admin.home');
             }
-        } else {
+        } 
+        else {
             return redirect()->back();
         }
     }
@@ -41,5 +42,57 @@ class HomeController extends Controller
             // return view('user.home',['doctors'=>$doctors]);
         }
         
+    }
+
+    public function appointment(Request $request){
+        $data=new appointment;
+        $data->name=$request->name;
+        $data->email=$request->email;
+        $data->date=$request->date;
+        $data->phone=$request->number;
+        $data->message=$request->message;
+        $data->doctor=$request->doctor;
+        $data->status='In progress';
+        if(Auth::id()){
+            $data->user_id=Auth::user()->id;
+        }
+        else{
+            $data->user_id='guest';
+        }
+        $data->save();
+        
+        //return redirect()->back();
+        return redirect()->back()->with('message','Appointment Request Successfull. We will contact you soon.');
+    }
+    public function myappointment(){
+        if(Auth::id()){
+            if(Auth::user()->usertype==0){
+            $userid=Auth::user()->id;
+            $appoint=appointment::where('user_id',$userid)->get();
+            return view('user.my_appointment',compact('appoint'));
+            }
+            else{
+                return redirect()->back();
+            }
+        }
+        else{
+            return redirect('login');
+        }
+    }
+
+    public function cancel_appoint($id){
+        if(Auth::id()){
+            if(Auth::user()->usertype==0){
+            $data=appointment::find($id);
+            $data->delete();
+            return redirect()->back();
+            }
+            else{
+                return redirect()->back();
+            }
+        }
+        else{
+            return redirect('login');
+        }
     }
 }

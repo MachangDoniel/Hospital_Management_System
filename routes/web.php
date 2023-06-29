@@ -21,7 +21,7 @@ use App\Http\Controllers\AdminController;
 
 Route::get('/',[HomeController::class,'index']);
 
-Route::get('/home',[HomeController::class,'redirect']);
+Route::get('/home',[HomeController::class,'redirect'])->middleware('auth','verified');
 
 Route::middleware([
     'auth:sanctum',
@@ -35,3 +35,15 @@ Route::middleware([
 
 Route::get('/add_doctor_view',[AdminController::class,'addview']);
 Route::post('/upload_doctor',[AdminController::class,'upload']);
+Route::post('/appointment',[HomeController::class,'appointment']);
+Route::get('/myappointment',[HomeController::class,'myappointment']);
+Route::get('/cancel_appoint/{id}',[HomeController::class,'cancel_appoint']);
+Route::get('/showappointment',[AdminController::class,'showappointment']);
+Route::get('/approve/{id}',[AdminController::class,'approve']);
+Route::get('/cancel/{id}',[AdminController::class,'cancel']);
+Route::get('/showdoctor',[AdminController::class,'showdoctor']);
+Route::get('/updatedoctor/{id}',[AdminController::class,'updatedoctor']);
+Route::get('/deletedoctor/{id}',[AdminController::class,'deletedoctor']);
+Route::post('/editdoctor/{id}',[AdminController::class,'editdoctor']);
+Route::get('/emailview/{id}',[AdminController::class,'emailview']);
+Route::post('/sendemail/{id}',[AdminController::class,'sendemail']);

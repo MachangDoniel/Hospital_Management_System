@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class Doctors extends Model
+class Appointment extends Model
 {
-    //protected $table='doctors';
     use HasFactory;
+    use Notifiable;
 }
